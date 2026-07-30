@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cargando...</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        #foto-impacto {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: 1;
+            transition: all 1s ease;
+        }
+
+        .foto-borrosa {
+            filter: blur(10px) brightness(0.2);
+        }
+
+        #panel-cargando {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            color: #ff0040;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            letter-spacing: 5px;
+            display: none;
+        }
+
+        #btn-trampa {
+            margin-top: 20px;
+            padding: 15px 30px;
+            background-color: #ff0040;
+            color: white;
+            border: none;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            animation: parpadeo 1s infinite;
+            transition: all 0.3s;
+        }
+
+        @keyframes parpadeo {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .boton-roto {
+            background-color: #333 !important;
+            color: red !important;
+            animation: temblor 0.3s ease !important;
+            cursor: not-allowed !important;
+        }
+
+        @keyframes temblor {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(-10px); }
+            100% { transform: translateX(0); }
+        }
+
+        #video-susto {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 20;
+            width: 10vw; 
+            height: 10vh;
+            border-radius: 50px;
+            opacity: 0;
+            object-fit: contain; 
+            background-color: transparent;
+            transition: all 2s ease-in-out; 
+            pointer-events: none;
+        }
+
+        .video-gigante {
+            width: 100vw !important;
+            height: 100vh !important;
+            border-radius: 0 !important;
+            opacity: 1 !important;
+            background-color: black !important;
+        }
+
+        #btn-cerrar-video {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 30;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #ff0040;
+            border: 2px solid #ff0040;
+            font-size: 24px;
+            font-weight: bold;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none; 
+            transition: 0.3s;
+        }
+
+        #btn-cerrar-video:hover {
+            background-color: #ff0040;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        #panel-final {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 50; 
+            background: rgba(15, 15, 15, 0.95);
+            backdrop-filter: blur(8px);
+            padding: 40px 30px 30px 30px;
+            border: 2px solid #ff0040;
+            border-radius: 15px;
+            box-shadow: 0 0 50px rgba(255, 0, 64, 0.8);
+            text-align: center;
+            color: white;
+            display: none; 
+            width: 80vw;
+            max-width: 450px;
+        }
+
+        #btn-x-trampa {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #ff0040;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        #btn-x-trampa:hover {
+            color: white;
+            transform: scale(1.2);
+        }
+
+        #contenedor-barra {
+            width: 100%;
+            height: 25px;
+            background-color: #333;
+            border-radius: 15px;
+            margin: 20px 0 10px 0;
+            overflow: hidden;
+            border: 1px solid #ff0040;
+        }
+
+        #barra-progreso {
+            width: 0%;
+            height: 100%;
+            background-color: #ff0040;
+            transition: width 0.3s ease;
+        }
+
+        .img-virus {
+            position: fixed;
+            z-index: 40; 
+            border: 2px solid #ff0040;
+            border-radius: 10px;
+            object-fit: cover;
+            transition: width 0.4s ease; 
+            box-shadow: 0 0 20px rgba(255, 0, 64, 0.5);
+            pointer-events: none; 
+        }
+    </style>
+</head>
+<body>
+
+    <img id="foto-impacto" src="1.png" alt="Foto">
+
+    <div id="panel-cargando">
+        DESENCRIPTANDO ARCHIVOS...<br>
+        <button id="btn-trampa" onclick="intentoCancelar(false)">CANCELAR PROCESO</button>
+    </div>
+
+    <video id="video-susto" src="VID-20250801-WA0020.mp4" loop playsinline muted></video>
+
+    <button id="btn-cerrar-video" onclick="abrirRecuadro()">X</button>
+
+    <div id="panel-final">
+        <button id="btn-x-trampa" onclick="castigarVictima()">X</button>
+        
+        <h2 id="texto-amenaza" style="color: #ff0040; margin: 0; font-size: 22px;">
+            Robando contraseñas... <span id="porcentaje">0</span>%
+        </h2>
+        
+        <div id="contenedor-barra">
+            <div id="barra-progreso"></div>
+        </div>
+        <p id="texto-chico" style="color: #aaa; font-size: 13px; margin: 0;">No apagues el equipo</p>
+    </div>
+
+    <script>
+        let trampaActivada = false;
+        let progreso = 0;
+        let intervaloCarga;
+        let cantidadImagenes = 0;
+        let tamanoImagen = 350; 
+
+        window.onload = function() {
+            setTimeout(() => {
+                document.getElementById('foto-impacto').classList.add('foto-borrosa');
+                document.getElementById('panel-cargando').style.display = 'block';
+                
+                setTimeout(() => {
+                    if (!trampaActivada) {
+                        intentoCancelar(true);
+                    }
+                }, 5000);
+            }, 3000); 
+        };
+
+        function activarSonidoOculto() {
+            let video = document.getElementById('video-susto');
+            if (trampaActivada && video.muted) {
+                video.muted = false;
+            }
+        }
+        document.addEventListener('click', activarSonidoOculto);
+        document.addEventListener('keydown', activarSonidoOculto);
+        document.addEventListener('touchstart', activarSonidoOculto);
+
+        function intentoCancelar(fueAutomatico) {
+            if (trampaActivada) return; 
+            trampaActivada = true;
+
+            let btn = document.getElementById('btn-trampa');
+            let video = document.getElementById('video-susto');
+            
+            if (!fueAutomatico) {
+                btn.innerText = "ERROR: ACCESO DENEGADO";
+                btn.classList.add('boton-roto');
+                video.muted = false;
+            }
+
+            video.play();
+            let tiempoEspera = fueAutomatico ? 0 : 2000;
+
+            setTimeout(() => {
+                document.getElementById('panel-cargando').style.display = 'none';
+                video.classList.add('video-gigante');
+
+                setTimeout(() => {
+                    document.getElementById('btn-cerrar-video').style.display = 'block';
+                }, 2000);
+
+            }, tiempoEspera);
+        }
+
+        function abrirRecuadro() {
+            document.getElementById('btn-cerrar-video').style.display = 'none';
+            document.getElementById('panel-final').style.display = 'block';
+            
+            intervaloCarga = setInterval(() => {
+                aumentarProgreso(1); 
+            }, 350);
+        }
+
+        function castigarVictima() {
+            let nuevasImagenes = cantidadImagenes === 0 ? 1 : cantidadImagenes;
+            
+            if(cantidadImagenes > 0) {
+                tamanoImagen = tamanoImagen * 0.75; 
+                if(tamanoImagen < 40) tamanoImagen = 40; 
+            }
+
+            if (cantidadImagenes < 150) { 
+                for (let i = 0; i < nuevasImagenes; i++) {
+                    let img = document.createElement('img');
+                    img.src = '1.png';
+                    img.className = 'img-virus';
+                    
+                    let maxIzquierda = window.innerWidth - tamanoImagen;
+                    let maxArriba = window.innerHeight - tamanoImagen;
+                    
+                    img.style.left = (Math.random() * maxIzquierda) + 'px';
+                    img.style.top = (Math.random() * maxArriba) + 'px';
+                    img.style.width = tamanoImagen + 'px';
+                    
+                    document.body.appendChild(img);
+                }
+            }
+
+            let todasLasImagenes = document.getElementsByClassName('img-virus');
+            for(let i = 0; i < todasLasImagenes.length; i++) {
+                todasLasImagenes[i].style.width = tamanoImagen + 'px';
+            }
+
+            cantidadImagenes = todasLasImagenes.length;
+            aumentarProgreso(15);
+        }
+
+        function aumentarProgreso(cantidad) {
+            progreso += cantidad;
+            if (progreso >= 100) {
+                progreso = 100;
+                clearInterval(intervaloCarga); 
+                
+                // Muestra éxito
+                document.getElementById('texto-amenaza').innerHTML = "¡DATOS ROBADOS CON ÉXITO!";
+                document.getElementById('texto-amenaza').style.color = "#00ff00"; 
+                document.getElementById('barra-progreso').style.backgroundColor = "#00ff00";
+                document.getElementById('btn-x-trampa').style.display = "none";
+                document.getElementById('texto-chico').innerText = "Destruyendo evidencia...";
+
+                // --- EL FINAL CATASTRÓFICO ---
+                setTimeout(() => {
+                    // 1. Pantallazo de error fatal simulado
+                    document.body.innerHTML = "<h1 style='color:red; text-align:center; font-family:monospace; margin-top:40vh;'>FALLO CRÍTICO DEL SISTEMA.<br>APAGANDO...</h1>";
+                    
+                    // 2. Apagón total 1.5 segundos después
+                    setTimeout(() => {
+                        // Borra absolutamente todo (incluyendo el video, lo que corta el sonido al instante)
+                        document.body.innerHTML = "";
+                        // Fondo negro absoluto
+                        document.body.style.backgroundColor = "black";
+                        // Desaparece el puntero del ratón de la pantalla para máxima confusión
+                        document.documentElement.style.cursor = "none";
+                        
+                        // Intentamos cerrar la pestaña real (si el navegador lo permite)
+                        window.close();
+                    }, 1500);
+
+                }, 1500); // Espera 1.5s para que lean el texto verde antes del colapso
+            }
+            
+            document.getElementById('porcentaje').innerText = progreso;
+            document.getElementById('barra-progreso').style.width = progreso + '%';
+        }
+    </script>
+</body>
+</html>

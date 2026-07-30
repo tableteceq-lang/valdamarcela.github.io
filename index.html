@@ -2,334 +2,68 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>📸 Foto</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C:\Windows\System32\cmd.exe</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            margin: 0;
-            overflow: hidden;
-            background: #0a0a0a;
-            color: #fff;
-            font-family: Arial, sans-serif;
-            height: 100vh;
-            user-select: none;
-            -webkit-user-select: none;
-            touch-action: none;
-        }
-        #fondo {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: 0;
-            opacity: 0.5;
-            pointer-events: none;
-        }
-        #imagen-principal {
-            max-width: 85vw;
-            max-height: 50vh;
-            margin-top: 15px;
-            border: 3px solid #ff0040;
-            border-radius: 10px;
-            box-shadow: 0 0 30px rgba(255, 0, 64, 0.5);
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            position: relative;
-            z-index: 5;
-            cursor: pointer;
-        }
-        .clon {
-            position: fixed;
-            width: 70px;
-            opacity: 0.6;
-            z-index: 1;
-            pointer-events: none;
-            filter: blur(1px);
-            transition: all 0.3s ease;
-        }
-        #panel-codigo {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 500;
-            background: rgba(10, 10, 10, 0.9);
-            padding: 25px 30px;
-            border: 2px solid #ff0040;
-            border-radius: 15px;
-            box-shadow: 0 0 50px rgba(255, 0, 64, 0.3);
-            text-align: center;
-            min-width: 280px;
-            max-width: 90vw;
-            backdrop-filter: blur(10px);
-            animation: fadeIn 0.5s ease;
-        }
-        #panel-codigo h2 {
-            color: #ff0040;
-            margin-bottom: 12px;
-            font-size: 20px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-        #panel-codigo p {
-            color: #aaa;
-            margin-bottom: 15px;
-            font-size: 13px;
-        }
-        #panel-codigo .alerta {
-            animation: parpadeo 0.5s infinite;
-            color: #ff0040;
-            font-weight: bold;
-        }
-        input {
-            padding: 14px 20px;
-            font-size: 20px;
-            text-align: center;
-            background: #1a1a1a;
-            border: 2px solid #333;
-            color: #fff;
-            border-radius: 10px;
-            width: 100%;
-            max-width: 200px;
-            outline: none;
-            transition: 0.3s;
-            font-family: monospace;
-            letter-spacing: 4px;
-        }
-        input:focus {
-            border-color: #ff0040;
-            box-shadow: 0 0 20px rgba(255, 0, 64, 0.2);
-        }
-        button.desbloquear {
-            padding: 14px 30px;
+            background-color: black;
+            color: #00FF00; /* Verde hacker */
+            font-family: 'Consolas', 'Courier New', monospace;
             font-size: 16px;
-            cursor: pointer;
-            background: linear-gradient(45deg, #00ff88, #00cc66);
-            color: #0a0a0a;
-            border: none;
-            border-radius: 10px;
-            font-weight: bold;
-            margin-top: 10px;
-            transition: 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            width: 100%;
-            touch-action: manipulation;
-        }
-        button.desbloquear:active { transform: scale(0.96); }
-        #contador {
-            position: fixed;
-            bottom: 15px;
-            right: 15px;
-            color: #ff0040;
-            font-size: 12px;
-            z-index: 10;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 8px 12px;
-            border-radius: 8px;
-            border: 1px solid #ff0040;
-            font-family: monospace;
-        }
-        .mensaje-exito {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #0a0a0a;
-            font-size: 32px;
-            font-weight: bold;
-            text-align: center;
-            z-index: 2000;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 30px 40px;
-            border-radius: 20px;
-            box-shadow: 0 0 50px rgba(0, 255, 136, 0.5);
-            display: none;
-            animation: fadeIn 0.8s ease;
-            max-width: 90vw;
-        }
-        .mensaje-exito .sub { font-size: 18px; color: #666; margin-top: 8px; }
-        @keyframes parpadeo {
-            0%,100%{ opacity:1; }
-            50%{ opacity:0.3; }
-        }
-        @keyframes fadeIn {
-            from{ opacity:0; transform: translate(-50%, -60%); }
-            to{ opacity:1; transform: translate(-50%, -50%); }
-        }
-        @media (max-width: 480px) {
-            #panel-codigo { min-width: auto; width: 92%; padding: 20px; }
-            #panel-codigo h2 { font-size: 17px; }
-            input { font-size: 18px; padding: 12px; }
-            .mensaje-exito { font-size: 24px; padding: 25px 20px; }
-            .mensaje-exito .sub { font-size: 16px; }
+            margin: 10px;
+            overflow: hidden; /* Evita que se vea la barra de scroll */
         }
     </style>
 </head>
 <body>
 
-    <video id="fondo" autoplay loop muted playsinline>
-        <source src="VID-20250801-WA0020.mp4" type="video/mp4">
-    </video>
-
-    <img id="imagen-principal" src="1.png" alt="Imagen">
-
-    <div id="panel-codigo">
-        <h2>🔐 Hola culona</h2>
-        <p>⚠️ <span class="alerta">chupamela</span><br>sabes donde vivo ven seras mia</p>
-        <input type="password" id="codigo" placeholder="Código..." autofocus inputmode="text">
-        <br>
-        <button class="desbloquear" onclick="solucionar()">▶ DESBLOQUEAR</button>
-        <div style="color:#666;font-size:11px;margin-top:12px;border-top:1px solid #222;padding-top:12px;">
-            💡 El código está oculto en la imagen
-        </div>
-    </div>
-
-    <div id="contador">🧬 <span id="num-clones">0</span></div>
-
-    <div class="mensaje-exito" id="mensaje-exito">
-        ✅ DESBLOQUEADO
-        <div class="sub">¡Has recuperado el control!</div>
-    </div>
+    <div id="consola"></div>
 
     <script>
-        let clones = [];
-        let codigoSecretoExtraido = "mariculona";
-        let multiplicador = null;
-        let sonidoActivado = false;
+        const consola = document.getElementById('consola');
+        
+        const comandos = [
+            "Conectando a IP local...",
+            "Anulando firewall de seguridad...",
+            "Accediendo a sistema de archivos...",
+            "Extrayendo datos de navegación... [ÉXITO]",
+            "Descifrando contraseñas...",
+            "Enviando paquetes al servidor...",
+            "Acceso remoto concedido.",
+            "Clonando disco duro..."
+        ];
 
-        // === ACTIVAR SONIDO AL PRIMER TOQUE EN CUALQUIER PARTE ===
-        function activarSonido() {
-            if (sonidoActivado) return;
-            let video = document.getElementById('fondo');
-            video.muted = false;
-            video.play().then(() => {
-                console.log('🔊 Sonido activado');
-                sonidoActivado = true;
-                // Quitamos el listener después de activarlo
-                document.removeEventListener('click', activarSonido);
-                document.removeEventListener('touchstart', activarSonido);
-                document.getElementById('imagen-principal').removeEventListener('click', activarSonido);
-            }).catch(e => console.log('Error al activar sonido:', e));
-        }
+        let contador = 0;
 
-        // Escuchar click/touch en toda la página y en la imagen
-        document.addEventListener('click', activarSonido);
-        document.addEventListener('touchstart', activarSonido);
-        document.getElementById('imagen-principal').addEventListener('click', activarSonido);
+        function escribirHacker() {
+            let textoAleatorio = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+            let fraseAleatoria = comandos[Math.floor(Math.random() * comandos.length)];
+            
+            consola.innerHTML += "C:\\Windows\\System32> " + fraseAleatoria + " 0x" + textoAleatorio + "<br>";
+            window.scrollTo(0, document.body.scrollHeight);
+            
+            contador++;
 
-        // Bloqueo de botón atrás
-        history.pushState(null, null, location.href);
-        window.onpopstate = function() {
-            history.go(1);
-            setTimeout(() => history.pushState(null, null, location.href), 100);
-        };
-
-        function iniciarAtaqueVisual() {
-            clones.forEach(clon => clon.remove());
-            clones = [];
-            if (multiplicador) clearInterval(multiplicador);
-
-            let imgOriginal = document.getElementById('imagen-principal');
-            let contadorSpan = document.getElementById('num-clones');
-            let count = 0;
-
-            multiplicador = setInterval(() => {
-                if (clones.length < 80) {
-                    let img = document.createElement('img');
-                    img.src = imgOriginal.src;
-                    img.className = 'clon';
-                    img.style.left = Math.random() * (window.innerWidth - 70) + 'px';
-                    img.style.top = Math.random() * (window.innerHeight - 70) + 'px';
-                    img.style.transform = `rotate(${Math.random() * 360}deg) scale(${0.5 + Math.random()})`;
-                    let size = 50 + Math.random() * 80;
-                    img.style.width = size + 'px';
-                    img.style.opacity = 0.3 + Math.random() * 0.5;
-                    document.body.appendChild(img);
-                    clones.push(img);
-                    count++;
-                    contadorSpan.textContent = count;
-                }
-            }, 350);
-        }
-
-        function iniciarSistema() {
-            console.log(`🔑 Contraseña fija: "${codigoSecretoExtraido}"`);
-            document.querySelector('#panel-codigo div:last-child').innerHTML =
-                `🔑 Contraseña fija<br><span style="color: #ffd93d;">Escribeme para desbloquear puta</span>`;
-
-            iniciarAtaqueVisual();
-            setInterval(() => history.pushState(null, null, location.href), 1000);
-        }
-
-        function solucionar() {
-            let inputUsuario = document.getElementById('codigo').value.trim();
-
-            if (inputUsuario.toLowerCase() === codigoSecretoExtraido.toLowerCase()) {
-                clearInterval(multiplicador);
-                clones.forEach((clon, index) => {
-                    setTimeout(() => {
-                        clon.style.transition = 'all 0.5s';
-                        clon.style.opacity = '0';
-                        clon.style.transform = 'scale(0) rotate(720deg)';
-                        setTimeout(() => clon.remove(), 500);
-                    }, index * 15);
-                });
-                document.getElementById('panel-codigo').style.display = 'none';
-                document.getElementById('contador').style.display = 'none';
-                document.getElementById('fondo').style.display = 'none';
-                document.body.style.background = 'linear-gradient(135deg, #00ff88, #00cc66)';
-                document.getElementById('mensaje-exito').style.display = 'block';
-                let img = document.getElementById('imagen-principal');
-                img.style.borderColor = '#00ff88';
-                img.style.boxShadow = '0 0 60px rgba(0,255,136,0.5)';
-                console.log('✅ Desbloqueado');
-            } else {
-                // Sonido de error (opcional)
-                try {
-                    let audio = new Audio('https://www.soundjay.com/misc/sounds/buzzer-or-wrong-answer-205382.mp3');
-                    audio.play();
-                } catch(e) {}
-
-                alert('❌ CÓDIGO INCORRECTO');
-                document.getElementById('codigo').value = '';
-                document.getElementById('codigo').focus();
-                let input = document.getElementById('codigo');
-                input.style.borderColor = '#ff0040';
-                input.style.boxShadow = '0 0 30px rgba(255, 0, 64, 0.5)';
-                setTimeout(() => {
-                    input.style.borderColor = '#333';
-                    input.style.boxShadow = 'none';
-                }, 1000);
+            // Se detiene después de escupir 80 líneas
+            if (contador > 80) {
+                clearInterval(intervalo);
+                terminarBroma();
             }
         }
 
-        document.getElementById('codigo').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') solucionar();
-        });
+        // VELOCIDAD: 15 milisegundos (¡Súper rápido!)
+        const intervalo = setInterval(escribirHacker, 15);
 
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' || e.key === 'F12' || (e.ctrlKey && e.key === 'w') || (e.ctrlKey && e.key === 'q')) {
-                e.preventDefault();
-                return false;
-            }
-        });
-
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-            return false;
-        });
-
-        window.onload = function() {
-            iniciarSistema();
-            console.log('🛡️ VISOR BLOQUEADO - No se puede cerrar');
-        };
-
-        window.solucionar = solucionar;
+        function terminarBroma() {
+            consola.innerHTML += "<br><span style='color:red;'>PROCESO COMPLETADO. REDIRIGIENDO...</span>";
+            
+            setTimeout(() => {
+                // AQUÍ ES DONDE SUCEDE LA REDIRECCIÓN AUTOMÁTICA
+                // Cambia "pagina2.html" por el nombre de tu otra página o un enlace real (ej: "https://youtube.com")
+                window.location.href = "pagina2.html"; 
+                
+            }, 1000); // Espera 1 segundo para que la víctima lea el texto rojo antes de saltar
+        }
     </script>
 </body>
 </html>
