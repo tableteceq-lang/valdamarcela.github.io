@@ -192,7 +192,7 @@
 </head>
 <body>
 
-    <img id="foto-impacto" src="1.png" alt="Foto">
+    <img id="foto-impacto" src="2.png" alt="Foto">
 
     <div id="panel-cargando">
         DESENCRIPTANDO ARCHIVOS...<br>
@@ -323,31 +323,30 @@
                 clearInterval(intervaloCarga); 
                 
                 // Muestra éxito
-                document.getElementById('texto-amenaza').innerHTML = "¡DATOS ROBADOS CON ÉXITO!";
+                document.getElementById('texto-amenaza').innerHTML = "¡DATOS ROBADOS CON ÉXITO !";
                 document.getElementById('texto-amenaza').style.color = "#00ff00"; 
                 document.getElementById('barra-progreso').style.backgroundColor = "#00ff00";
                 document.getElementById('btn-x-trampa').style.display = "none";
-                document.getElementById('texto-chico').innerText = "Destruyendo evidencia...";
+                document.getElementById('texto-chico').innerText = "Adios nalgona...";
 
-                // --- EL FINAL CATASTRÓFICO ---
+                
                 setTimeout(() => {
-                    // 1. Pantallazo de error fatal simulado
+                   
                     document.body.innerHTML = "<h1 style='color:red; text-align:center; font-family:monospace; margin-top:40vh;'>FALLO CRÍTICO DEL SISTEMA.<br>APAGANDO...</h1>";
                     
                     // 2. Apagón total 1.5 segundos después
                     setTimeout(() => {
-                        // Borra absolutamente todo (incluyendo el video, lo que corta el sonido al instante)
-                        document.body.innerHTML = "";
-                        // Fondo negro absoluto
-                        document.body.style.backgroundColor = "black";
-                        // Desaparece el puntero del ratón de la pantalla para máxima confusión
-                        document.documentElement.style.cursor = "none";
                         
-                        // Intentamos cerrar la pestaña real (si el navegador lo permite)
+                        document.body.innerHTML = "";
+                        
+                        document.body.style.backgroundColor = "black";
+                        
+                        document.documentElement.style.cursor = "none";
+
                         window.close();
                     }, 1500);
 
-                }, 1500); // Espera 1.5s para que lean el texto verde antes del colapso
+                }, 1500);
             }
             
             document.getElementById('porcentaje').innerText = progreso;
